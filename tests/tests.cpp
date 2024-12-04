@@ -26,9 +26,9 @@ bool matchVectors(const std::vector<T>& v1, const std::vector<T>& v2) {
     return v1 == v2;
 }
 
-struct TestAwarder {
+struct PointAwarder {
   public:
-    TestAwarder(const std::string& filename = "", bool verbose = true) : verbose_(verbose) {
+    PointAwarder(const std::string& filename = "", bool verbose = true) : verbose_(verbose) {
         if (filename.empty()) {
             return;
         }
@@ -39,7 +39,7 @@ struct TestAwarder {
         std::cout.rdbuf(file_.rdbuf());
     }
 
-    ~TestAwarder() {
+    ~PointAwarder() {
         if (verbose_) {
             std::cout << "Total points awarded: ";
         }
@@ -55,7 +55,7 @@ struct TestAwarder {
             std::cout << "Awarded: ";
         }
         std::cout << secret_contest_seed << points;
-        if (test_name != "") {
+        if (test_name != "" && verbose_) {
             std::cout << " for " << test_name;
         }
         std::cout << std::endl;
@@ -71,7 +71,7 @@ struct TestAwarder {
 
 // START OF TESTS
 
-TestAwarder awarder("", false);
+PointAwarder awarder;
 
 TEST_CASE("BMP read") {
     constexpr size_t TEST_AWARD_POINTS = 1;
