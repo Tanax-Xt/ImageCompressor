@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <cstdint>
 #include <vector>
 
 #pragma pack(push, 1)
