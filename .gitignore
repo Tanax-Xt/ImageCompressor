@@ -1,0 +1,6 @@
+.vscode
+build
+tmp_images
+logs
+*.out
+*.o
