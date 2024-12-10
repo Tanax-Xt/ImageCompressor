@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <fstream>
 #include <functional>
+#include <cmath>
 
 struct ColorRGB {
     uint8_t r = 0;
@@ -13,9 +14,7 @@ struct ColorRGB {
         return r == other.r && g == other.g && b == other.b;
     }
 
-    bool operator!=(const ColorRGB& other) const {
-        return !(*this == other);
-    }
+    bool operator!=(const ColorRGB& other) const { return !(*this == other); }
 };
 
 inline std::ostream& operator<<(std::ostream& os, const ColorRGB& color) {
