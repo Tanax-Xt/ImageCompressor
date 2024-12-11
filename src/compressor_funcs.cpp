@@ -17,8 +17,8 @@ void saveAsBMP(const UncompressedImage& img, const std::string& filename) {
      */
 
     BMP bmp(img.width, img.height);
-    for (int y = 0; img.height; y++) {
-        for (int x = 0; img.width; x++) {
+    for (int y = 0; y < img.height; y++) {
+        for (int x = 0; x < img.width; x++) {
             ColorRGB color = img.image_data[y][x];
             bmp.set_pixel(x, y, color.r, color.g, color.b);
         }
@@ -38,14 +38,15 @@ UncompressedImage loadFromBMP(const std::string& filename) {
     img.width = bmp.get_width();
     img.height = bmp.get_height();
     img.image_data.resize(img.height, std::vector<ColorRGB>(img.width));
-    for (int y = 0; img.height; y++) {
-        for (int x = 0; img.width; x++) {
+    for (int y = 0; y < img.height; y++) {
+        for (int x = 0; x < img.width; x++) {
             uint8_t r, g, b;
             bmp.get_pixel(x, y, r, g, b);
             img.image_data[y][x] = {r, g, b};
         }
     }
     return img;
+    return {};
 }
 
 UncompressedImage readUncompressedFile(const std::string& filename) {
