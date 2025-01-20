@@ -40,6 +40,14 @@ void edgeDetect(UncompressedImage& img) {
 void negative(UncompressedImage& img) {
     // change the color of each id to its negative
     // negative of a color is 255 - color for each channel
+    for (long long y = 0; y < img.height; ++y) {
+        for (long long x = 0; x < img.width; ++x) {
+            ColorRGB& pixel = img.image_data[y][x];
+            pixel.r = 255 - pixel.r;
+            pixel.g = 255 - pixel.g;
+            pixel.b = 255 - pixel.b;
+        }
+    }
 }
 
 void negative(CompressedImage& img) {

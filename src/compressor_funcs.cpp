@@ -46,7 +46,6 @@ UncompressedImage loadFromBMP(const std::string& filename) {
         }
     }
     return img;
-    return {};
 }
 
 UncompressedImage readUncompressedFile(const std::string& filename) {
@@ -55,7 +54,33 @@ UncompressedImage readUncompressedFile(const std::string& filename) {
      * Gracefully handle errors if the file format is invalid.
      * Return the UncompressedImage object.
      */
-    return {};
+    std::ifstream file(filename, std::ios::binary);
+    if (!file.is_open()) {
+        file.close();
+        return {};
+    }
+
+    UncompressedImage img;
+    file.read(reinterpret_cast<char*>(&img.width), sizeof(img.width));
+    file.read(reinterpret_cast<char*>(&img.height), sizeof(img.height));
+
+    if (file.fail()) {
+        file.close();
+        return {};
+    }
+
+    img.image_data.resize(img.height, std::vector<ColorRGB>(img.width));
+    for (int y = 0; y < img.height; ++y) {
+        for (int x = 0; x < img.width; ++x) {
+            file.read(reinterpret_cast<char*>(&img.image_data[y][x]), sizeof(ColorRGB));
+            if (file.fail()) {
+                file.close();
+                return {};
+            }
+        }
+    }
+
+    return img;
 }
 
 void writeUncompressedFile(const std::string& filename, const UncompressedImage& image) {
@@ -63,6 +88,27 @@ void writeUncompressedFile(const std::string& filename, const UncompressedImage&
      * Write the file according to the uncompressed file format.
      * Gracefully handle errors if occured.
      */
+
+    std::ofstream file(filename, std::ios::binary);
+    if (!file.is_open()) {
+    }
+
+    file.write(reinterpret_cast<const char*>(&image.width), sizeof(image.width));
+    file.write(reinterpret_cast<const char*>(&image.height), sizeof(image.height));
+    if (file.fail()) {
+        file.close();
+    }
+
+    for (int y = 0; y < image.height; ++y) {
+        for (int x = 0; x < image.width; ++x) {
+            const ColorRGB& color = image.image_data[y][x];
+            file.write(reinterpret_cast<const char*>(&color), sizeof(ColorRGB));
+            if (file.fail()) {
+                file.close();
+            }
+        }
+    }
+    file.close();
 }
 
 uint8_t findClosestColorId(const ColorRGB& color, const std::map<uint8_t, ColorRGB>& colorTable) {
